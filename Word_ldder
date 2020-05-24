@@ -1,0 +1,109 @@
+Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+
+    Only one letter can be changed at a time.
+    Each transformed word must exist in the word list.
+
+Note:
+
+    Return 0 if there is no such transformation sequence.
+    All words have the same length.
+    All words contain only lowercase alphabetic characters.
+    You may assume no duplicates in the word list.
+    You may assume beginWord and endWord are non-empty and are not the same.
+
+Example 1:
+
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+
+Example 2:
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Code ....................
+
+
+
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> visited=new HashSet<>();
+        for(String current:wordList)
+        {
+            visited.add(current);
+        }
+        
+        if(!visited.contains(endWord))
+        {
+            return 0;
+        }
+        Queue<String> queue=new LinkedList<>();
+        queue.offer(beginWord);
+        int level=1;
+        
+        while(!queue.isEmpty())
+        {
+            int size=queue.size();
+            for(int i=0;i<size;i++)
+            {
+                String current=queue.remove();
+                char[] current_word=current.toCharArray();
+                for(int j=0;j<current_word.length;j++)
+                {
+                    char original=current_word[j];
+                    for(char c='a' ;c<='z';c++)
+                    {
+                        if(current_word[j]==c)
+                        {
+                            continue;
+                        }
+                        current_word[j]=c;
+                        String newWord=String.valueOf(current_word);
+                        if(newWord.equals(endWord))
+                        {
+                            return level+1;
+                        }
+                        
+                        if(visited.contains(newWord ))
+                        {
+                            queue.offer(newWord);
+                            visited.remove(newWord);
+                        }
+                    }
+                    current_word[j]=original;
+                }
+            }
+            
+            level++;
+        }
+        
+        return 0;
+    }
+}
